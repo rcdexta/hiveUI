@@ -1,0 +1,188 @@
+<!--[if IE]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
+<script type='text/javascript' src='strokeText.js'></script>
+<script type='text/javascript' src='jquery.min.js'></script>
+<script type='text/javascript' src='hexaface.js'></script>
+<script type="text/javascript" src="jquery-ui.min.js"></script>
+
+<script type="text/javascript">
+
+function create2DArray(rows, cols) {
+  	var arr = [];
+	for (var i=0;i<rows;i++) {
+    	arr[i] = [];
+		for(var j=0;j<cols;j++) {
+			arr[i][j] = -1;
+		}
+  	}
+	return arr;
+}
+
+var NUMBER_OF_HEX = 10;
+
+var elements = new Array;
+var parent = 'hex0';
+var hexArray = create2DArray(50,50);
+var map = new Object;
+map[parent] = new hexa(25,25);
+
+var smileys = [":-)", ":-]", ":-*", ":o)", ";oP", ";-]", ":-}", ":-D", ":o}", ":-!"];
+var colors = ["#017E42", "#FEDFE8", "#153177", "#5FC0D8", "#FD8925"];
+
+function nextSmiley()
+{
+	return smileys[Math.ceil(Math.random() * smileys.length - 1)];
+}
+
+function nextColor(element)
+{
+	return colors[Math.ceil(Math.random() * colors.length -1)];
+}
+
+function hexa(i,j) {
+	this.i = i;
+	this.j = j;
+	hexArray[i][j] = 1;
+}
+
+function cloneHex(container, id) {
+	newhex = $('#hexref').clone();
+	newhex.attr('id', 'hex' + id); 
+	newhex.find('.hex_small_center').append("<span class='transform_text'>" + smile() + "</span>");
+	setBorderColor(newhex);
+	newhex.css('display','block');
+	$("#"+container).append(newhex);	
+}
+
+function rightBottom(parent, child) {
+ 	hp = map[parent];
+	//console.log(hexArray[hp.i+1, hp.j+1]);
+	if (hexArray[hp.i+1][hp.j+1] != -1) return false;
+	map[child] = new hexa(hp.i+1, hp.j+1);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "left top",
+		"at": "right bottom",
+		"of": $("#"+parent),
+		"offset": "-13 -30"
+	});
+	return true;
+}
+
+function centerTop(parent, child) {
+	hp = map[parent];
+	if (hexArray[hp.i-2][hp.j] != -1) return false;
+	map[child] = new hexa(hp.i-2, hp.j);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "center bottom",
+		"at": "center top",
+		"of": $("#"+parent),
+		"offset": "0 -5"
+	});
+	return true;
+}
+	
+function leftBottom(parent, child) {
+ 	hp = map[parent];
+	if (hexArray[hp.i+1][hp.j-1] != -1) return false;
+	map[child] = new hexa(hp.i+1, hp.j-1);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "right top",
+		"at": "left bottom",
+		"of": $("#"+parent),
+		"offset": "13 -30"
+	});
+	return true;
+}
+
+function centerBottom(parent, child) {
+ 	hp = map[parent];
+	if (hexArray[hp.i+2][hp.j] != -1) return false;
+	map[child] = new hexa(hp.i+2, hp.j);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "center top",
+		"at": "center bottom",
+		"of": $("#"+parent),
+		"offset": "0 5"
+	});
+	return true;
+}
+
+function rightTop(parent, child) {
+ 	hp = map[parent];
+	if (hexArray[hp.i-1][hp.j+1] != -1) return false;
+	map[child] = new hexa(hp.i-1, hp.j+1);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "left bottom",
+		"at": "right top",
+		"of": $("#"+parent),
+		"offset": "-12 30"
+	});
+	return true;
+}
+
+function leftTop(parent, child) {
+ 	hp = map[parent];
+	if (hexArray[hp.i-1][hp.j-1] != -1) return false;
+	map[child] = new hexa(hp.i-1, hp.j-1);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "right bottom",
+		"at": "left top",
+		"of": $("#"+parent),
+		"offset": "13 30"
+	});
+	return true;
+}
+
+function nextOnHive(parent, child)
+{
+	if (rightBottom(parent,child) != false) return true;
+	if (leftTop(parent,child) != false) return true;
+	if (leftBottom(parent,child) != false) return true;
+	if (rightTop(parent,child) != false) return true;
+	if (centerBottom(parent,child) != false) return true;
+	if (centerTop(parent,child) != false) return true;
+	return false;
+}
+
+
+$(function() 
+{
+	$('#container').drawHexFace(parent, ':o)', 2, 'black', 'yellow', '{margin: 0px auto}');
+		
+	for(var i=1;i<=NUMBER_OF_HEX;i++)
+	{
+	  $('#container').drawHexFace('hex'+i, nextSmiley(), 2, nextColor());
+	}
+
+	
+    for(var i=1;i<=6 && i<=NUMBER_OF_HEX;i++)
+	{
+      nextOnHive(parent, 'hex' + i);
+	}
+
+	for(var i=7;i<=NUMBER_OF_HEX;i++)
+    {
+      while(true)
+      {
+        var index = Math.ceil(Math.random() * elements.length / 3 - 1);
+        var nextHex = elements[index];
+        if (nextOnHive(nextHex, 'hex' + i) == false) {
+          elements.splice(index, 1);
+        }
+        else break;
+      }
+    }
+	
+
+});
+
+</script>
+	
+<div id='container' style='margin:350px 0px 0px 450px; padding:0px; width: 400px; height: 800px'>	
+
+</div>

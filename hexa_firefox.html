@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'></script>
+    <script type='text/javascript' src='strokeText.js'></script>
+  </head>
+<body>
+<div id='container'>
+</div>
+</body>
+<script>
+  jQuery.fn.drawHexface = function(id, scaleFactor, strokeColor, fillColor)
+  {
+    fillColor = fillColor || "#FFFFFF";     //defaults to transparent fill
+    strokeColor = strokeColor || "#000000"; //defaults to black border
+    scaleFactor = scaleFactor || 1;
+
+    var container = this;
+    var newCanvas = document.createElement('canvas');
+    newCanvas.setAttribute('id', id);
+    newCanvas.setAttribute('width', '38px');
+    newCanvas.setAttribute('height', '32px');
+    container.append(newCanvas);
+
+    var canvas = document.getElementById(id);
+    if (canvas.getContext)
+    {
+          var ctx = canvas.getContext("2d");
+          ctx.canvas.width = canvas.width*scaleFactor;
+          ctx.canvas.height = canvas.height*scaleFactor;
+          ctx.scale(scaleFactor, scaleFactor);
+          ctx.fillStyle = fillColor;
+          ctx.strokeStyle = strokeColor;
+          x=1;y=1;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(x, y+15);ctx.lineTo(x+8, y);
+          ctx.lineTo(x+28, y);ctx.lineTo(x+36, y+15);
+          ctx.lineTo(x+28, y+30);ctx.lineTo(x+8, y+30);
+          ctx.lineTo(x, y+15);
+          ctx.closePath();
+          if (fillColor != null) ctx.fill();
+          if (strokeColor != null || fillColor == null) ctx.stroke();
+          ctx.save();
+          //ctx.font = "bold 10px sans-serif";
+          //ctx.fillStyle = 'black'
+          ctx.rotate(Math.PI/2);
+         set_textRenderContext(ctx);
+          if(check_textRenderContext(ctx)) {
+            ctx.strokeText(':-)', 10, -22, 5, 150, 100, 100);
+          }
+      }
+   }
+
+  $('#container').drawHexface('hex1', 1.5)
+
+</script>
+
+</html>

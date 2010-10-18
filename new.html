@@ -1,0 +1,175 @@
+<html>
+<link rel="stylesheet" type="text/css" href="basics.css" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
+<script type="text/javascript">
+
+function create2DArray(rows, cols) {
+  	var arr = [];
+	for (var i=0;i<rows;i++) {
+    	arr[i] = [];
+		for(var j=0;j<cols;j++) {
+			arr[i][j] = -1;
+		}
+  	}
+	return arr;
+}
+
+var NUMBER_OF_HEX = 20;
+
+var elements = new Array;
+var parent = 'hex1';
+var hexArray = create2DArray(25,25);
+var map = new Object;
+map['hex1'] = new hexa(12,12);
+
+function hexa(i,j) {
+	this.i = i;
+	this.j = j;
+	hexArray[i][j] = 1;
+}
+
+function cloneHex(container, id) {
+	newhex = $('#hexref').clone();
+	newhex.attr('id', 'hex' + id);
+	newhex.css('display','block');
+	$("#"+container).append(newhex);	
+}
+
+function rightBottom(parent, child) {
+ 	hp = map[parent];
+	//console.log(hexArray[hp.i+1, hp.j+1]);
+	if (hexArray[hp.i+1][hp.j+1] != -1) return false;
+	map[child] = new hexa(hp.i+1, hp.j+1);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "left top",
+		"at": "right bottom",
+		"of": $("#"+parent),
+		"offset": "-20 -60"
+	});
+	return true;
+}
+
+function centerTop(parent, child) {
+	hp = map[parent];
+	if (hexArray[hp.i-2][hp.j] != -1) return false;
+	map[child] = new hexa(hp.i-2, hp.j);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "center bottom",
+		"at": "center top",
+		"of": $("#"+parent),
+		"offset": "0 -20"
+	});
+	return true;
+}
+	
+function leftBottom(parent, child) {
+ 	hp = map[parent];
+	if (hexArray[hp.i+1][hp.j-1] != -1) return false;
+	map[child] = new hexa(hp.i+1, hp.j-1);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "right top",
+		"at": "left bottom",
+		"of": $("#"+parent),
+		"offset": "20 -60"
+	});
+	return true;
+}
+
+function centerBottom(parent, child) {
+ 	hp = map[parent];
+	if (hexArray[hp.i+2][hp.j] != -1) return false;
+	map[child] = new hexa(hp.i+2, hp.j);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "center top",
+		"at": "center bottom",
+		"of": $("#"+parent),
+		"offset": "0 20"
+	});
+	return true;
+}
+
+function rightTop(parent, child) {
+ 	hp = map[parent];
+	if (hexArray[hp.i-1][hp.j+1] != -1) return false;
+	map[child] = new hexa(hp.i-1, hp.j+1);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "left bottom",
+		"at": "right top",
+		"of": $("#"+parent),
+		"offset": "-20 60"
+	});
+	return true;
+}
+
+function leftTop(parent, child) {
+ 	hp = map[parent];
+	if (hexArray[hp.i-1][hp.j-1] != -1) return false;
+	map[child] = new hexa(hp.i-1, hp.j-1);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "right bottom",
+		"at": "left top",
+		"of": $("#"+parent),
+		"offset": "20 60"
+	});
+	return true;
+}
+
+function nextOnHive(parent, child)
+{
+	if (rightBottom(parent,child) != false) return true;
+	if (leftTop(parent,child) != false) return true;
+	if (leftBottom(parent,child) != false) return true;
+	if (rightTop(parent,child) != false) return true;
+	if (centerBottom(parent,child) != false) return true;
+	if (centerTop(parent,child) != false) return true;
+	return false;
+}
+
+
+$(function() 
+{
+	for(var i=2;i<=NUMBER_OF_HEX;i++)
+      cloneHex('hexcontainer', i);
+
+    for(var i=2;i<=7;i++)
+      nextOnHive(parent, 'hex' + i);
+
+    for(var i=8;i<=NUMBER_OF_HEX;i++)
+    {
+      while(true)
+      {
+        var index = Math.ceil(Math.random() * elements.length / 3 - 1);
+        var nextHex = elements[index];
+        //console.log('hex' + i + "=" + nextHex);
+        if (nextOnHive(nextHex, 'hex' + i) == false) {
+          elements.splice(index, 1);
+        }
+        else break;
+      }
+    }
+});
+
+</script>
+
+<body>
+	<div id='hexcontainer' style="margin:0 auto; border: 1px solid; height: 1100px">
+		
+		<div class="polygon" id='hex1' style="margin: 0 auto; position: relative; top:500;">
+		  <div class="trapezoid top"></div><div class="trapezoid bottom"></div>
+		</div>
+	
+		<div class="polygon" id='hexref' style="display: none">
+		  <div class="trapezoid top"></div><div class="trapezoid bottom"></div>
+		</div>
+		
+		
+	</div>
+</body>

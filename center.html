@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>CSS Centering: Auto-width Margins</title>
+<style type="text/css" media="screen">
+
+body {
+	margin:200px 0px; padding:0px; /* Need to set body margin and padding to get consistency between browsers. */
+	text-align:center; /* Hack for IE5/Win */
+	}
+	
+#Content {
+	width:500px;
+	margin:0px auto; /* Right and left margin widths set to "auto" */
+	text-align:left; /* Counteract to IE5/Win Hack */
+	padding:15px;
+	border:1px dashed #333;
+	background-color:#eee;
+	}
+</style>
+</head>
+
+<body>
+
+<div id="Content">
+	Centering: Auto-width Margins
+</div>

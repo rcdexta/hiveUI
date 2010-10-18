@@ -1,0 +1,105 @@
+<html>
+<link rel="stylesheet" type="text/css" href="basics.css" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+<script type="text/javascript">
+$(function() {
+	//right-bottom
+     $("#hex2").position({
+		"my": "left top",
+		"at": "right bottom",
+		"of": $("#hex1"),
+		"offset": "-20 -60"
+	});
+	
+	//top
+	 $("#hex3").position({
+		"my": "center bottom",
+		"at": "center top",
+		"of": $("#hex1"),
+		"offset": "0 -20"
+	});
+		
+	//left-bottom
+	 $("#hex4").position({
+		"my": "right top",
+		"at": "left bottom",
+		"of": $("#hex1"),
+		"offset": "20 -60"
+	});
+	
+	//bottom
+	 $("#hex5").position({
+		"my": "center top",
+		"at": "center bottom",
+		"of": $("#hex1"),
+		"offset": "0 20"
+	});
+	
+	//right-top
+	 $("#hex6").position({
+		"my": "left bottom",
+		"at": "right top",
+		"of": $("#hex1"),
+		"offset": "-20 60"
+	});
+	
+	//left top
+     $("#hex7").position({
+		"my": "right bottom",
+		"at": "left top",
+		"of": $("#hex1"),
+		"offset": "20 60"
+	});
+	
+	//right-top
+	 $("#hex8").position({
+		"my": "left bottom",
+		"at": "right top",
+		"of": $("#hex3"),
+		"offset": "-20 60"
+	});
+	
+		
+});
+</script>
+
+<div style="margin:0 auto; border: 1px solid; height: 1100px">
+	<div class="polygon" id='hex1' style="margin: 0 auto; position: relative; top:500;">
+	  <div class="trapezoid top"></div><div class="trapezoid bottom"></div>
+	</div>
+	
+	<div class="polygon" id='hex2'>
+	  <div class="trapezoid top"></div><div class="trapezoid bottom"></div>
+	</div>
+	
+	<div class="polygon" id='hex3'>
+	  <div class="trapezoid top"></div><div class="trapezoid bottom"></div>
+	</div>
+	
+	<div class="polygon" id='hex4'>
+	  <div class="trapezoid top"></div><div class="trapezoid bottom"></div>
+	</div>
+	
+	<div class="polygon" id='hex5'>
+	  <div class="trapezoid top"></div><div class="trapezoid bottom"></div>
+	</div>
+	
+	<div class="polygon" id='hex6'>
+	  <div class="trapezoid top"></div><div class="trapezoid bottom"></div>
+	</div>
+	
+	<div class="polygon" id='hex7'>
+	  <div class="trapezoid top"></div><div class="trapezoid bottom"></div>
+	</div>
+	
+	<div class="polygon" id='hex8'>
+	  <div class="trapezoid top"></div><div class="trapezoid bottom"></div>
+	</div>
+	
+	
+</div>
+
+
+
+</html>

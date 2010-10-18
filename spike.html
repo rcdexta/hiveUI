@@ -1,0 +1,26 @@
+<html>
+
+
+<head>
+	<title>ExplorerCanvas Example 1</title>
+	<!--[if IE]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
+	<script type='text/javascript' src='strokeText.js'></script>
+	<script type='text/javascript' src='jquery.min.js'></script>
+	<script type='text/javascript' src='hexaface.js'></script>
+	<script type='text/javascript'>
+	
+	$(document).ready(function() {
+		$('#container').drawHexFace('hex', ':-P', 2, 'blue', 'yellow');
+	});
+			
+	</script>
+
+</head>
+<body>
+<div id='outer'>
+ <div id='container'>
+ </div>
+ </div>
+
+</body>
+</html>

@@ -1,0 +1,283 @@
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
+<style type='text/css'>
+
+.polygon {
+	width: 100px;
+	height: 87px;
+}
+
+.parent_hex {
+	margin: 200px auto; position: relative;
+}
+
+.child_hex {	
+	position: absolute; display: none; right: 0; bottom: 0;
+}
+
+.borderdraw {line-height:0px;width:0px;height:0px;border-style:solid;}
+
+.hex_parent_left {
+	clear: left; float: left; border-width: 43.5px 25px 43.5px 0px; border-color: transparent #EE0077 transparent transparent;
+}
+
+.hex_left {
+	clear: left; float: left; border-width: 43.5px 25px 43.5px 0px; border-color: transparent yellow transparent transparent;
+}
+
+.hex_small_left {
+	clear: left; float: left; border-width: 39.15px 22.5px 39.15px 0px; border-color: transparent white transparent transparent;
+}
+
+.hex_parent_center {
+	float: left; width: 50px; height: 10px; padding: 38.5px 0px; background: none repeat scroll 0% 0% #EE0077; color: white; text-align: center;
+}
+
+.hex_center {
+	float: left; width: 50px; height: 10px; padding: 38.5px 0px; background: none repeat scroll 0% 0% yellow; color: black; text-align: center;
+}
+
+.hex_small_center {
+	float: left; width: 45px; height: 8px; padding: 34.65px 0px; background: none repeat scroll 0% 0% white; color: black; text-align: center;
+}
+
+.transform_text {
+	-webkit-transform: rotate(90deg); 
+	-moz-transform: rotate(90deg);
+	#for IE: writing-mode: tb-rl;
+	font: 15px arial, sans-serif;
+}
+
+.hex_parent_right {
+	float: left; border-width: 43.5px 0px 43.5px 25px; border-color: transparent transparent transparent #EE0077;		
+}
+
+.hex_right {
+	float: left; border-width: 43.5px 0px 43.5px 25px; border-color: transparent transparent transparent yellow;		
+}
+
+.hex_small_right {
+	float: left; border-width: 39.15px 0px 39.15px 22.5px; border-color: transparent transparent transparent white;
+}
+
+.hexa_container {
+	width: 100px;
+	height: 87px;
+    position: relative;
+	#margin: 0 auto;
+	top: 300px;
+}
+
+.hexa_outer, 
+.hexa_inner {
+    position: absolute;
+}
+
+.hexa_inner {
+    z-index: 10;
+	left: 5px;
+	top: 4.5px;
+}
+
+
+</style>
+
+
+<script type="text/javascript">
+
+function create2DArray(rows, cols) {
+  	var arr = [];
+	for (var i=0;i<rows;i++) {
+    	arr[i] = [];
+		for(var j=0;j<cols;j++) {
+			arr[i][j] = -1;
+		}
+  	}
+	return arr;
+}
+
+var NUMBER_OF_HEX = 10;
+
+var elements = new Array;
+var parent = 'hex1';
+var hexArray = create2DArray(25,25);
+var map = new Object;
+map['hex1'] = new hexa(12,12);
+
+var smileys = [":-)", ":-]", ":-*", ":o)", ";oP", ";-]", ":-}", ":-D", ":o}", ":-!"];
+var colors = ["017E42", "FEDFE8", "153177", "5FC0D8", "FD8925"];
+
+function smile()
+{
+	return smileys[Math.ceil(Math.random() * smileys.length - 1)];
+}
+
+function setBorderColor(element)
+{
+	color = colors[Math.ceil(Math.random() * colors.length -1)];
+	element.find('.hex_left').css('border-right-color', color);
+	element.find('.hex_center').css('background-color', color);
+	element.find('.hex_right').css('border-left-color', color);
+}
+
+function hexa(i,j) {
+	this.i = i;
+	this.j = j;
+	hexArray[i][j] = 1;
+}
+
+function cloneHex(container, id) {
+	newhex = $('#hexref').clone();
+	newhex.attr('id', 'hex' + id); 
+	newhex.find('.hex_small_center').append("<span class='transform_text'>" + smile() + "</span>");
+	setBorderColor(newhex);
+	newhex.css('display','block');
+	$("#"+container).append(newhex);	
+}
+
+function rightBottom(parent, child) {
+ 	hp = map[parent];
+	//console.log(hexArray[hp.i+1, hp.j+1]);
+	if (hexArray[hp.i+1][hp.j+1] != -1) return false;
+	map[child] = new hexa(hp.i+1, hp.j+1);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "left top",
+		"at": "right bottom",
+		"of": $("#"+parent),
+		"offset": "-20 -40"
+	});
+	return true;
+}
+
+function centerTop(parent, child) {
+	hp = map[parent];
+	if (hexArray[hp.i-2][hp.j] != -1) return false;
+	map[child] = new hexa(hp.i-2, hp.j);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "center bottom",
+		"at": "center top",
+		"of": $("#"+parent),
+		"offset": "0 -5"
+	});
+	return true;
+}
+	
+function leftBottom(parent, child) {
+ 	hp = map[parent];
+	if (hexArray[hp.i+1][hp.j-1] != -1) return false;
+	map[child] = new hexa(hp.i+1, hp.j-1);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "right top",
+		"at": "left bottom",
+		"of": $("#"+parent),
+		"offset": "20 -40"
+	});
+	return true;
+}
+
+function centerBottom(parent, child) {
+ 	hp = map[parent];
+	if (hexArray[hp.i+2][hp.j] != -1) return false;
+	map[child] = new hexa(hp.i+2, hp.j);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "center top",
+		"at": "center bottom",
+		"of": $("#"+parent),
+		"offset": "0 5"
+	});
+	return true;
+}
+
+function rightTop(parent, child) {
+ 	hp = map[parent];
+	if (hexArray[hp.i-1][hp.j+1] != -1) return false;
+	map[child] = new hexa(hp.i-1, hp.j+1);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "left bottom",
+		"at": "right top",
+		"of": $("#"+parent),
+		"offset": "-20 40"
+	});
+	return true;
+}
+
+function leftTop(parent, child) {
+ 	hp = map[parent];
+	if (hexArray[hp.i-1][hp.j-1] != -1) return false;
+	map[child] = new hexa(hp.i-1, hp.j-1);
+	elements.push(child);
+	$("#"+child).position({
+		"my": "right bottom",
+		"at": "left top",
+		"of": $("#"+parent),
+		"offset": "20 40"
+	});
+	return true;
+}
+
+function nextOnHive(parent, child)
+{
+	if (rightBottom(parent,child) != false) return true;
+	if (leftTop(parent,child) != false) return true;
+	if (leftBottom(parent,child) != false) return true;
+	if (rightTop(parent,child) != false) return true;
+	if (centerBottom(parent,child) != false) return true;
+	if (centerTop(parent,child) != false) return true;
+	return false;
+}
+
+
+$(function() 
+{
+	for(var i=2;i<=NUMBER_OF_HEX;i++)
+      cloneHex('hexcontainer', i);
+
+    for(var i=2;i<=7;i++)
+      nextOnHive(parent, 'hex' + i);
+
+    for(var i=8;i<=NUMBER_OF_HEX;i++)
+    {
+      while(true)
+      {
+        var index = Math.ceil(Math.random() * elements.length / 3 - 1);
+        var nextHex = elements[index];
+        //console.log('hex' + i + "=" + nextHex);
+        if (nextOnHive(nextHex, 'hex' + i) == false) {
+          elements.splice(index, 1);
+        }
+        else break;
+      }
+    }
+
+	//Console.write($('.polygon').length);
+	
+});
+
+</script>
+	
+<div id='hexcontainer'>	
+	<div id='hex1' class='polygon parent_hex'>
+		<div class="hex_parent_left borderdraw"><!-- --></div>
+		<div class="hex_parent_center"><span class="transform_text">:o)</span></div>
+		<div class="hex_parent_right borderdraw"><!-- --></div>
+	</div>
+	
+	<div id='hexref' class='polygon child_hex'>
+		<div class='hexa_outer'>
+			<div class="hex_left borderdraw"><!-- --></div>
+			<div class="hex_center"></div>
+			<div class="hex_right borderdraw"><!-- --></div>
+		</div>
+		<div class='hexa_inner'>
+			<div class="hex_small_left borderdraw"><!-- --></div>
+			<div class="hex_small_center"></div>
+			<div class="hex_small_right borderdraw"><!-- --></div>
+		</div>
+	</div>
+</div>
