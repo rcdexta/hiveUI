@@ -17,7 +17,7 @@ function create2DArray(rows, cols) {
 	return arr;
 }
 
-var NUMBER_OF_HEX = 10;
+var NUMBER_OF_HEX = 1;
 
 var elements = new Array;
 var parent = 'hex0';
@@ -25,12 +25,13 @@ var hexArray = create2DArray(50,50);
 var map = new Object;
 map[parent] = new hexa(25,25);
 
-var smileys = [":+D"];
+var smileys = ["8,^,'",";,^,D", ":,+,]", ":,*,)"];
 var colors = ["#0000"];
 
 function nextSmiley()
 {
-	return smileys[Math.ceil(Math.random() * smileys.length - 1)];
+	//return smileys[Math.ceil(Math.random() * smileys.length - 1)];
+	return smileys[0];
 }
 
 function nextColor(element)
@@ -152,7 +153,7 @@ function nextOnHive(parent, child)
 
 $(function() 
 {
-	$('#container').drawHexFace(parent, ':o)', 2, 'black', 'yellow', '{margin: 0px auto}');
+	$('#container').drawHexFace(parent, ':,o,)', 2, 'black', 'yellow', '{margin: 0px auto}');
 		
 	for(var i=1;i<=NUMBER_OF_HEX;i++)
 	{

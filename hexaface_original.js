@@ -1,8 +1,8 @@
-jQuery.fn.drawHexaface = function(id, smiley, scaleFactor, canvasStrokeColor, canvasFillColor, styleOptions)
+jQuery.fn.drawHexFace = function(id, smiley, scaleFactor, canvasStrokeColor, canvasFillColor, styleOptions)
 {
 
 	var fillColor = canvasFillColor || "#FFFFFF";     //defaults to transparent fill
-	var strokeColor = canvasStrokeColor || "#000000"; //defaults to black border
+	var strokeColor = canvasStrokeColor || "#666666"; //defaults to black border
 	scaleFactor = scaleFactor || 1;
 	styleOptions = styleOptions || "{}";
 
@@ -60,10 +60,8 @@ jQuery.fn.drawHexaface = function(id, smiley, scaleFactor, canvasStrokeColor, ca
 		ctx.rotate(Math.PI/2);
 		set_textRenderContext(ctx);
 		if(check_textRenderContext(ctx)) {
-			var adjustment = 0;
-			var textWidth = get_textWidth(smiley, 7, 100, 100);
-			var startX = (32 - textWidth) / 2;
-			ctx.strokeText(smiley, startX, -23.5, 7, 100, 100, 100);
+			ctx.strokeText(smiley, 10, -23, 6, 200, 100, 100);
 		}
+
 	}
 }
